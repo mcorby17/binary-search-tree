@@ -74,6 +74,47 @@ Node<T>* Tree<T>::makeNode(T data, Node<T>* left=NULL, Node<T>* right=NULL)
 	return newNode;
 }
 
+template<class T>
+void Tree<T>::parseTree(Node<T>* newNode)
+{
+	Node<T> *tempPtr = startPtr;							// Make tempPtr to keep track of where we are in the Tree
+
+	while (true) {											// Endlessly loop until a break occurs
+
+		if (nodeCompare(newNode, tempPtr) == 'g') {			// If newNode->getData() > tempPtr->getData()
+
+			if (tempPtr->getRightPtr() == NULL) {			// Append newNode to current node's right ptr if there's no node
+															// attached to right ptr, which holds greater-than data
+				tempPtr->setRightPtr(newNode);
+				break;										// Break from the endless loop since we successfully added the new node
+
+			}
+			else											// If tempPtr->getRightPtr() != NULL, there is already a node here
+				tempPtr = tempPtr->getRightPtr();			// Set tempPtr to hold the address of the node at the current node's right ptr
+
+		}
+
+		else if (nodeCompare(newNode, tempPtr) == 'l') {	// Else if newNode->getData() is less than tempPtr->getData()
+
+			if (tempPtr->getLeftPtr() == NULL) {			// If tempPtr->getLeftPtr() returns NULL, there is no node attached to node tempPtr is pointing at
+
+				tempPtr->setLeftPtr(newNode);				// Attach the new node via the current node's left pointer
+				break;										// Break from the endless loop since we successfully attrached 
+
+			}
+			else											// If tempPtr->getLeftPtr() != NULL, there is already a node here
+				tempPtr = tempPtr->getLeftPtr();            // Set tempPtr to hold the address of the node at the current node's left ptr
+
+		}
+
+		else {												// Else, datas of each comapred node using nodeCompare() must be equal
+			cout << newNode->getData() << " is already in the tree.\n";    // Give a prompt to notify that the node is in the tree
+			break;
+		}
+
+	}
+}
+
 // Accessors -------------------------------------------
 template <class T>
 int Tree<T>::getNumOfNodes(){
@@ -118,46 +159,8 @@ void Tree<T>::addNode(const T dat) {
 														// 2 scenarios:
 	if (startPtr == NULL)								// 1) The Tree instance has no nodes
 		startPtr = newNode;												
-
-    else {											    // 2) The Tree instance has nodes already
-
-		Node<T> *tempPtr = startPtr;					// Make tempPtr to keep track of where we are in the Tree
-    														
-		while(true){									// Endlessly loop until a break occurs
-      
-		  if(nodeCompare(newNode, tempPtr) == 'g'){		// If newNode->getData() > tempPtr->getData()
-														
-			if(tempPtr->getRightPtr() == NULL){			// Append newNode to current node's right ptr if there's no node
-														// attached to right ptr, which holds greater-than data
-			  tempPtr->setRightPtr(newNode);			
-			  break;									// Break from the endless loop since we successfully added the new node
-
-			}
-		    else									    // If tempPtr->getRightPtr() != NULL, there is already a node here
-			  tempPtr = tempPtr->getRightPtr();			// Set tempPtr to hold the address of the node at the current node's right ptr
-	  
-		  }
-		
-		  else if(nodeCompare(newNode, tempPtr) == 'l'){ // Else if newNode->getData() is less than tempPtr->getData()
-	
-			if(tempPtr->getLeftPtr() == NULL){			 // If tempPtr->getLeftPtr() returns NULL, there is no node attached to node tempPtr is pointing at
-	  
-			  tempPtr->setLeftPtr(newNode);				 // Attach the new node via the current node's left pointer
-			  break;									 // Break from the endless loop since we successfully attrached 
-
-			}
-			else										 // If tempPtr->getLeftPtr() != NULL, there is already a node here
-			  tempPtr = tempPtr->getLeftPtr();           // Set tempPtr to hold the address of the node at the current node's left ptr
-
-		  }
-		
-		  else {										   // Else, datas of each comapred node using nodeCompare() must be equal
-			  cout << dat << " is already in the tree.\n"; // Give a prompt to notify that the node is in the tree
-			  break;
-		  }
-
-		}  
-  }  
+    else 											    // 2) The Tree instance has nodes already
+		parseTree(newNode);
   
   numOfNodes++;
 

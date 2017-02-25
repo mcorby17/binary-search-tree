@@ -27,6 +27,11 @@ class Tree {
 	//Input: Data, optionally pass addresses of nodes to attatch to left and right pointers of the created node
 	//Output: Address to a new node containing passed data and optional pointers
 
+	void parseTree(Node<T>*);
+	//Searches through the tree to and appends the passed node to it
+	//Input: Address of a node object
+	//Output: None
+
   public:
 
   //Constructors
