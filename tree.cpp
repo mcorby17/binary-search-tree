@@ -62,6 +62,18 @@ void Tree<T>::printContents(Node<T>* nodePtr) {
 
 }
 
+template<class T>
+Node<T>* Tree<T>::makeNode(T data, Node<T>* left=NULL, Node<T>* right=NULL)
+{
+	Node<T>* newNode = new Node<T>;
+	
+	newNode->setData(data);
+	newNode->setLeftPtr(left);
+	newNode->setRightPtr(right);
+
+	return newNode;
+}
+
 // Accessors -------------------------------------------
 template <class T>
 int Tree<T>::getNumOfNodes(){
@@ -101,62 +113,50 @@ void Tree<T>::setLeaves(T num){
 template <class T>
 void Tree<T>::addNode(const T dat) {
   
-  // Make a new node and insert the data
-  Node<T>* newNode = new Node<T>;
-  newNode->setData(dat);
+	Node<T>* newNode = makeNode(dat);					// Make a new node and insert the data
   
-  // 2 scenarios:
+														// 2 scenarios:
+	if (startPtr == NULL)								// 1) The Tree instance has no nodes
+		startPtr = newNode;												
 
-  // 1) The Tree instance has no nodes
-  if(startPtr == NULL)
-    startPtr = newNode;
+    else {											    // 2) The Tree instance has nodes already
 
-  // 2) The Tree instance has nodes already
-  else {
-
-    // Make tempPtr to keep track of where we are in the Tree
-    Node<T> *tempPtr = startPtr;
-    
-    // Endlessly loop until a break occurs
-    while(true){
+		Node<T> *tempPtr = startPtr;					// Make tempPtr to keep track of where we are in the Tree
+    														
+		while(true){									// Endlessly loop until a break occurs
       
-      // If newNode->data > tempPtr->data
-      if(nodeCompare(newNode, tempPtr) == 'g'){
-	
-	// Append newNode to tree if there's no node
-	// attached to right ptr, which holds greater-than data
-		if(tempPtr->getRightPtr() == NULL){
+		  if(nodeCompare(newNode, tempPtr) == 'g'){		// If newNode->getData() > tempPtr->getData()
+														
+			if(tempPtr->getRightPtr() == NULL){			// Append newNode to current node's right ptr if there's no node
+														// attached to right ptr, which holds greater-than data
+			  tempPtr->setRightPtr(newNode);			
+			  break;									// Break from the endless loop since we successfully added the new node
 
-		  tempPtr->setRightPtr(newNode);
-		  //numOfLeaves++; See below comment
-		  break;
-
-		}
-		else
-		  tempPtr = tempPtr->getRightPtr();	
+			}
+		    else									    // If tempPtr->getRightPtr() != NULL, there is already a node here
+			  tempPtr = tempPtr->getRightPtr();			// Set tempPtr to hold the address of the node at the current node's right ptr
 	  
-      }
-	  // Else if newNode->data is less than tempPtr->data
-      else if(nodeCompare(newNode, tempPtr) == 'l'){
+		  }
+		
+		  else if(nodeCompare(newNode, tempPtr) == 'l'){ // Else if newNode->getData() is less than tempPtr->getData()
 	
-		if(tempPtr->getLeftPtr() == NULL){
+			if(tempPtr->getLeftPtr() == NULL){			 // If tempPtr->getLeftPtr() returns NULL, there is no node attached to node tempPtr is pointing at
 	  
-		  tempPtr->setLeftPtr(newNode);
-		  //numOfLeaves++; Need a seperate function to calculate leaves. This would just also count nodes
-		  break;
+			  tempPtr->setLeftPtr(newNode);				 // Attach the new node via the current node's left pointer
+			  break;									 // Break from the endless loop since we successfully attrached 
 
-		}
-		else
-		  tempPtr = tempPtr->getLeftPtr();
+			}
+			else										 // If tempPtr->getLeftPtr() != NULL, there is already a node here
+			  tempPtr = tempPtr->getLeftPtr();           // Set tempPtr to hold the address of the node at the current node's left ptr
 
-      }
-	  // Else, datas must be equal
-	  else {
-		  cout << dat << " is already in the tree.\n";
-		  break;
-	  }
+		  }
+		
+		  else {										   // Else, datas of each comapred node using nodeCompare() must be equal
+			  cout << dat << " is already in the tree.\n"; // Give a prompt to notify that the node is in the tree
+			  break;
+		  }
 
-    }  
+		}  
   }  
   
   numOfNodes++;
