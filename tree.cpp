@@ -69,7 +69,7 @@ void Tree<T>::printContents(Node<T>* nodePtr) {
 }
 
 template<class T>
-Node<T>* Tree<T>::makeNode(T data, Node<T>* up=NULL, Node<T>* left=NULL, Node<T>* right=NULL)
+Node<T>* Tree<T>::makeNode(const T data, Node<T>* up=NULL, Node<T>* left=NULL, Node<T>* right=NULL)
 {
 	Node<T>* newNode = new Node<T>;
 	
@@ -122,6 +122,41 @@ void Tree<T>::parseTree(Node<T>* newNode)
 		}
 
 	}
+}
+
+template<class T>
+bool Tree<T>::isInTree(const T data, int &level, Node<T>* &addrOfFoundNode)
+{
+	Node<T>* searchPtr = startPtr;
+
+	while (true) {
+
+		T searchPtrData = searchPtr->getData();
+
+		if (searchPtrData == data) {
+			addrOfFoundNode = searchPtr;
+			return true;
+		}
+		else if ((searchPtr->getLeftPtr() == NULL) && (searchPtr->getRightPtr() == NULL))
+			return false;
+		else {
+
+			if (data > searchPtrData) {
+				searchPtr = searchPtr->getRightPtr();
+				level++;
+			}
+			else if (data < searchPtrData) {
+				searchPtr = searchPtr->getLeftPtr();
+				level++;
+			}
+			else
+				return true;
+
+		}
+
+	}
+
+	return false;
 }
 
 // Accessors -------------------------------------------
@@ -177,7 +212,19 @@ void Tree<T>::addNode(const T dat) {
 
 template <class T>
 Node<T>* Tree<T>::search(const T data) {
-	return NULL;
+
+	int level = 0;
+	Node<T>* foundNodeAddr = NULL;
+
+	if (isInTree(data, level, foundNodeAddr)) {
+		cout << data << " was found in the Tree.\n";
+		cout << "Located at level " << level << endl;
+		cout << "Memory Address: " << foundNodeAddr << endl;
+	}
+	else
+		cout << data << " is not in the Tree.\n";
+		
+	return foundNodeAddr;
 }
 
 template <class T>

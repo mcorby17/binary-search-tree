@@ -22,7 +22,7 @@ class Tree {
 	//Input: 1 Node Pointer
 	//Output: Printed data
 
-	Node<T>* makeNode(T, Node<T>* = NULL, Node<T>* = NULL, Node<T>* = NULL);
+	Node<T>* makeNode(const T, Node<T>* = NULL, Node<T>* = NULL, Node<T>* = NULL);
 	//Creates a node
 	//Input: Data, optionally pass addresses of nodes to attatch to left and right pointers of the created node
 	//Output: Address to a new node containing passed data and optional pointers
@@ -31,6 +31,11 @@ class Tree {
 	//Searches through the tree to and appends the passed node to it
 	//Input: Address of a node object
 	//Output: None
+
+	bool isInTree(const T data, int &level, Node<T>* &addrOfFoundNode);
+	//Searches through the tree for a node with the same data that was passed to the function
+	//Input: Data of templated type T, optionally pass a reference to variables to hold the level the found node is at, along with it's address
+	//Output: true if a node holding the same data is found, false if not
 
   public:
 
