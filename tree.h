@@ -22,7 +22,7 @@ class Tree {
 	//Input: 1 Node Pointer
 	//Output: Printed data
 
-	Node<T>* makeNode(T, Node<T>* = NULL, Node<T>* = NULL);
+	Node<T>* makeNode(T, Node<T>* = NULL, Node<T>* = NULL, Node<T>* = NULL);
 	//Creates a node
 	//Input: Data, optionally pass addresses of nodes to attatch to left and right pointers of the created node
 	//Output: Address to a new node containing passed data and optional pointers

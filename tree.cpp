@@ -47,6 +47,7 @@ void Tree<T>::printContents(Node<T>* nodePtr) {
 
 	Node<T>* left = nodePtr->getLeftPtr();
 	Node<T>* right = nodePtr->getRightPtr();
+	Node<T>* up = nodePtr->getUpPtr();
 
 	cout << "Data: " << nodePtr->getData() << endl;
 
@@ -60,14 +61,20 @@ void Tree<T>::printContents(Node<T>* nodePtr) {
 	else
 		cout << "No right node.\n";
 
+	if (up != NULL)
+		cout << "Previous node holds: " << up->getData() << endl;
+	else
+		cout << "This is the root node.\n";
+
 }
 
 template<class T>
-Node<T>* Tree<T>::makeNode(T data, Node<T>* left=NULL, Node<T>* right=NULL)
+Node<T>* Tree<T>::makeNode(T data, Node<T>* up=NULL, Node<T>* left=NULL, Node<T>* right=NULL)
 {
 	Node<T>* newNode = new Node<T>;
 	
 	newNode->setData(data);
+	newNode->setUpPtr(up);
 	newNode->setLeftPtr(left);
 	newNode->setRightPtr(right);
 
@@ -86,6 +93,7 @@ void Tree<T>::parseTree(Node<T>* newNode)
 			if (tempPtr->getRightPtr() == NULL) {			// Append newNode to current node's right ptr if there's no node
 															// attached to right ptr, which holds greater-than data
 				tempPtr->setRightPtr(newNode);
+				tempPtr->getRightPtr()->setUpPtr(tempPtr);	// Set the newNode's 'up' pointer to point to it's parent node, which tempPtr is pointing at
 				break;										// Break from the endless loop since we successfully added the new node
 
 			}
@@ -99,6 +107,7 @@ void Tree<T>::parseTree(Node<T>* newNode)
 			if (tempPtr->getLeftPtr() == NULL) {			// If tempPtr->getLeftPtr() returns NULL, there is no node attached to node tempPtr is pointing at
 
 				tempPtr->setLeftPtr(newNode);				// Attach the new node via the current node's left pointer
+				tempPtr->getLeftPtr()->setUpPtr(tempPtr);
 				break;										// Break from the endless loop since we successfully attrached 
 
 			}
@@ -199,7 +208,7 @@ void Tree<T>::visualTraverse() {
 
 		do {
 
-			cout << "How would you like to traverse the tree? (l - left, r - right, q - quit): ";   // 2) Ask if the user would like to move left or right down the tree
+			cout << "How would you like to traverse the tree? (l - left, r - right, u - up, q - quit): ";   // 2) Ask if the user would like to move left or right down the tree
 			cin >> choice;
 
 			choice = tolower(choice);
@@ -213,7 +222,7 @@ void Tree<T>::visualTraverse() {
 
 				}
 				else {
-					cout << "Please enter a valid selection (l, r, or q).\n";
+					cout << "There is no node there. Enter another command.\n";
 					continue;
 				}
 
@@ -227,7 +236,21 @@ void Tree<T>::visualTraverse() {
 
 				}
 				else {
-					cout << "Please enter a valid selection (l, r, or q).\n";
+					cout << "There is no node there. Enter another command.\n";
+					continue;
+				}
+
+			}
+			else if (choice == 'u') {
+
+				if (movingPtr->getUpPtr() != NULL) {
+
+					movingPtr = movingPtr->getUpPtr();
+					break;
+
+				}
+				else {
+					cout << "You are at the root node, there's no parent node!\nEnter another command.\n";
 					continue;
 				}
 

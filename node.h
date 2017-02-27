@@ -8,6 +8,7 @@ class Node {
     T         data;
     Node<T>*  left;
     Node<T>*  right;
+	Node<T>* up;
 
   public:
     Node();	    //Default Constructor, sets all private properties to NULL
@@ -21,6 +22,9 @@ class Node {
 
     Node<T> *getRightPtr();
     void setRightPtr(Node<T>*);
+
+	Node<T> *getUpPtr();
+	void setUpPtr(Node<T>*);
 
     void printInfo();
 };

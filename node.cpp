@@ -8,6 +8,7 @@ Node<T>::Node(){
   data = 0;
   left = NULL;
   right = NULL;
+  up = NULL;
 }
 
 template <class T>
@@ -15,6 +16,7 @@ Node<T>::Node(T data){
   this->data = data;
   left = NULL;
   right = NULL;
+  up = NULL;
 }
 
 template <class T>
@@ -42,6 +44,18 @@ void Node<T>::setRightPtr(Node<T>* ptr){
   right = ptr;
 }
 
+template<class T>
+Node<T>* Node<T>::getUpPtr()
+{
+	return up;
+}
+
+template<class T>
+void Node<T>::setUpPtr(Node<T>* ptr)
+{
+	up = ptr;
+}
+
 template <class T>
 Node<T>* Node<T>::getRightPtr(){
   return right;
@@ -52,5 +66,6 @@ void Node<T>::printInfo(){
   cout << "Data: " << data << endl;
   cout << "Left Ptr: " << left << endl;
   cout << "Right Ptr: " << right << endl;
+  cout << "Previous Node: " << up << endl;
   cout << endl;
 }
