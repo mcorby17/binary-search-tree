@@ -69,7 +69,7 @@ void Tree<T>::printContents(Node<T>* nodePtr) {
 }
 
 template<class T>
-Node<T>* Tree<T>::makeNode(const T data, Node<T>* up=NULL, Node<T>* left=NULL, Node<T>* right=NULL)
+Node<T>* Tree<T>::makeNode(const T data, Node<T>* const up, Node<T>* const left, Node<T>* const right)
 {
 	Node<T>* newNode = new Node<T>;
 	
@@ -159,6 +159,125 @@ bool Tree<T>::isInTree(const T data, int &level, Node<T>* &addrOfFoundNode)
 	return false;
 }
 
+template <class T>
+int Tree<T>::howManyNodesAttached(Node<T>* node){
+
+  int numOfNodes = 0;
+
+  if(node->getLeftPtr() != NULL)
+    numOfNodes++;
+  
+  if(node->getRightPtr() != NULL)
+    numOfNodes++;
+
+  return numOfNodes; 
+
+}
+
+template <class T>
+void Tree<T>::deleteNodeWithSinglePtr(Node<T>* node){
+
+  bool nodeIsLeftPtr = (node->getUpPtr()->getLeftPtr() == node); 
+  bool childIsLeftPtr = (node->getLeftPtr() != NULL);
+
+  if(nodeIsLeftPtr){ 
+
+    if(childIsLeftPtr){
+
+      node->getUpPtr()->setLeftPtr(node->getLeftPtr());
+      // Makes parent node point to the node-to-be-deleted's
+      // child node. Always want to append to parent's left node
+      // if node-to-be-deleted is the left child
+
+      node->getLeftPtr()->setUpPtr(node->getUpPtr());
+      // Makes node-to-be-deleted's child node point to the
+      // node-to-be-deleted's parent node 
+
+    }
+    else {
+ 
+      node->getUpPtr()->setLeftPtr(node->getRightPtr());
+      // Makes parent node point to the node-to-be-deleted's
+      // child node. Always want to append to parent's left node
+      // if node-to-be-deleted is the right child
+
+      node->getRightPtr()->setUpPtr(node->getUpPtr());
+      // Makes node-to-be-deleted's child node point to the
+      // node-to-be-deleted's parent node  
+
+    }        
+
+  }
+  else {
+
+    if (childIsLeftPtr) {
+
+      node->getUpPtr()->setRightPtr(node->getLeftPtr());
+      // Makes parent node point to the node-to-be-deleted's
+      // child node. Always want to append to parent's left node
+      // if node-to-be-deleted is the left child
+
+      node->getLeftPtr()->setUpPtr(node->getUpPtr());
+      // Makes node-to-be-deleted's child node point to the
+      // node-to-be-deleted's parent node 
+
+    } 
+    else {
+
+      node->getUpPtr()->setRightPtr(node->getRightPtr());
+      // Makes parent node point to the node-to-be-deleted's
+      // child node. Always want to append to parent's left node
+      // if node-to-be-deleted is the right child
+
+      node->getRightPtr()->setUpPtr(node->getUpPtr());
+      // Makes node-to-be-deleted's child node point to the
+      // node-to-be-deleted's parent node 
+
+    }
+
+  }
+  
+  delete node;
+
+}
+
+template <class T>
+void Tree<T>::deleteNodeWithBothPtrs(Node<T>* node){
+
+  //Will go down left branch by default since it doesn't matter if you parse down the left or right of the node-to-be-deleted
+
+  Node<T>* movingPtr = node->getLeftPtr();
+
+  while (movingPtr->getRightPtr() != NULL) {
+
+    movingPtr = movingPtr->getRightPtr(); 
+
+  } 
+
+  node->setData(movingPtr->getData());
+
+  setParentPtrToNull(movingPtr); 
+
+  if (movingPtr->getLeftPtr() != NULL)
+    deleteNodeWithSinglePtr(movingPtr);
+  else
+    delete movingPtr; 
+
+}
+
+template <class T>
+void Tree<T>::setParentPtrToNull(Node<T>* node){
+
+  Node<T>* parent = node->getUpPtr();
+  bool nodeIsLeftChild = (parent->getLeftPtr() == node);
+
+  if (nodeIsLeftChild)
+    parent->setLeftPtr(NULL);
+  else
+    parent->setRightPtr(NULL);
+
+}
+
 // Accessors -------------------------------------------
 template <class T>
 int Tree<T>::getNumOfNodes(){
@@ -211,30 +330,52 @@ void Tree<T>::addNode(const T dat) {
 }
 
 template <class T>
-Node<T>* Tree<T>::search(const T data) {
+Node<T>* Tree<T>::search(const T data, bool printDesc) {
 
 	int level = 0;
 	Node<T>* foundNodeAddr = NULL;
-
+	
 	if (isInTree(data, level, foundNodeAddr)) {
+	  if (printDesc) {
 		cout << data << " was found in the Tree.\n";
 		cout << "Located at level " << level << endl;
 		cout << "Memory Address: " << foundNodeAddr << endl;
+	  }
 	}
-	else
+	else {
+	  if (printDesc) {
 		cout << data << " is not in the Tree.\n";
-		
+	  }		
+	}
+	
 	return foundNodeAddr;
 }
 
 template <class T>
 void Tree<T>::deleteNode(const T data) {
+  
+  Node<T>* nodeToDelete = search(data, false);
 
-}
+  if (nodeToDelete != NULL) {
+    int numOfNodesAttached = howManyNodesAttached(nodeToDelete);
 
-template <class T>
-void Tree<T>::deleteNode(Node<T>* const* nodeAddress) {
-
+    switch(numOfNodesAttached) {
+    
+      case 0:
+	setParentPtrToNull(nodeToDelete);
+	delete nodeToDelete;
+	break;
+      case 1:
+	deleteNodeWithSinglePtr(nodeToDelete);
+	//connect single node to nodeToDelete->getUpPtr()
+	break;
+      case 2:
+	deleteNodeWithBothPtrs(nodeToDelete);
+	break;
+      default:
+	cout << "Some weird ass error\n";
+    } 
+  }
 }
 
 template <class T>

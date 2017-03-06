@@ -12,8 +12,10 @@ int main(){
 	t1.addNode(1);
 	t1.addNode(2);
 	t1.addNode(8);
+	t1.addNode(4);
 	
-	t1.search(8);
+	t1.deleteNode(3);	
+	t1.visualTraverse();
 
   return 0;
 }

@@ -22,7 +22,7 @@ class Tree {
 	//Input: 1 Node Pointer
 	//Output: Printed data
 
-	Node<T>* makeNode(const T, Node<T>* = NULL, Node<T>* = NULL, Node<T>* = NULL);
+	Node<T>* makeNode(const T, Node<T>* const up = NULL, Node<T>* const left = NULL, Node<T>* const right = NULL);
 	//Creates a node
 	//Input: Data, optionally pass addresses of nodes to attatch to left and right pointers of the created node
 	//Output: Address to a new node containing passed data and optional pointers
@@ -36,6 +36,24 @@ class Tree {
 	//Searches through the tree for a node with the same data that was passed to the function
 	//Input: Data of templated type T, optionally pass a reference to variables to hold the level the found node is at, along with it's address
 	//Output: true if a node holding the same data is found, false if not
+
+	int howManyNodesAttached(Node<T>*);
+	//Input: A pointer holding the address of a Node
+	//Output: An integer referring to how many pointers hold node addreses. This can only be 0,1, or 2.
+
+	void deleteNodeWithSinglePtr(Node<T>*);
+	//Input: pointer holding address of a node
+	//Output: none
+
+	void deleteNodeWithBothPtrs(Node<T>*);
+	//Sets the pointers around a node-to-be-deleted so that the Tree maintains correct form once the node is deleted
+	//Input: pointer holding the address of a node that will be deleted
+	//Output: None
+  
+	void setParentPtrToNull(Node<T>*);
+	//Used to set a parent's pointer to the passed child to NULL to avoid dangling pointers
+	//Input: A child node that will be deleted
+	//Output: none
 
   public:
 
@@ -52,16 +70,12 @@ class Tree {
     //Adds a node to the Tree.
     // Input: Value of templated type T
 
-    Node<T>* search(const T);	//Note: What happens if there's 2 or more nodes holding the same data?
+    Node<T>* search(const T, bool=true);	//Note: What happens if there's 2 or more nodes holding the same data?
     //Searches for a node holding data T.
     //Input: Data of type T
     //Output: The address of the node holding the data
 
-    void deleteNode(const T); //Note: Must account for nodes pointing to 0,1, or 2 nodes
-    //Deletes a node from the tree
-    //Input: Data of type T
-     
-    void deleteNode(Node<T>* const*);
+    void deleteNode(const T);
     //Deletes a node from the tree
     //Input: Address of node to be deleted
 
