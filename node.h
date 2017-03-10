@@ -8,7 +8,7 @@ class Node {
     T         data;
     Node<T>*  left;
     Node<T>*  right;
-	Node<T>* up;
+	Node<T>*  up;
 
   public:
     Node();	    //Default Constructor, sets all private properties to NULL

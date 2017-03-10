@@ -55,6 +55,16 @@ class Tree {
 	//Input: A child node that will be deleted
 	//Output: none
 
+	void getAscendingData(T[], Node<T>*, int&);
+	//Parses through the tree and places data in ascending order in the array
+	//Input: An array of type T, a pointer to a node, an index
+	//Output: none
+
+	void goToLowestLeftLeaf(Node<T>*&);
+	//Sends a node pointer to the lowest left leaf from the node it's currently pointing at
+	//Input: A node pointer holding a node address
+	//Output: none
+
   public:
 
   //Constructors

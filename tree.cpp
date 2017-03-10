@@ -278,7 +278,30 @@ void Tree<T>::setParentPtrToNull(Node<T>* node){
 
 }
 
-// Accessors -------------------------------------------
+template<class T>
+void Tree<T>::getAscendingData(T data[], Node<T>* node, int &index)
+{
+	if (node->getLeftPtr() != NULL) {
+		getAscendingData(data, node->getLeftPtr(), index);	// Use recursion to go through each node
+	}
+
+	data[index] = node->getData();							// If the left node ptr is null, we are at the smallest node in the branch and can copy data to the array
+	index++;	
+
+	if (node->getRightPtr() != NULL) {						// If there's a right node, we want to print that next
+		getAscendingData(data, node->getRightPtr(), index);
+	}
+}
+
+template<class T>
+void Tree<T>::goToLowestLeftLeaf(Node<T>* &ptr)
+{
+	while (ptr->getLeftPtr() != NULL) {
+		ptr = ptr->getLeftPtr();
+	}
+}
+
+// Accessors/Mutators -------------------------------------------
 template <class T>
 int Tree<T>::getNumOfNodes(){
   return numOfNodes;
@@ -375,11 +398,40 @@ void Tree<T>::deleteNode(const T data) {
       default:
 	cout << "Some weird ass error\n";
     } 
+
+	numOfNodes++;
   }
 }
 
 template <class T>
 void Tree<T>::returnAscOrDesc(const char aOrD) {
+	
+	T *dataArray = new T[numOfNodes];	// Allocate an array to hold all the data.
+										// Putting the data in an array will make it easy to return in ascending or descending order
+	int index = 0;
+	
+	getAscendingData(dataArray, startPtr, index);	// Fill the array in ascending order... 1, 2, 4, etc
+
+	if (aOrD == 'a') {					// If ascending
+
+		for (int i = 0; i < numOfNodes; i++) {
+
+			cout << dataArray[i] << " ";
+
+		}
+
+	}
+	else {								// If descending					
+
+		for (int i = numOfNodes-1; i >= 0; i--) {
+
+			cout << dataArray[i] << " ";
+
+		}
+
+	}
+
+	cout << endl;
 
 }
 

@@ -14,8 +14,7 @@ int main(){
 	t1.addNode(8);
 	t1.addNode(4);
 	
-	t1.deleteNode(3);	
-	t1.visualTraverse();
+	t1.returnAscOrDesc('d');
 
   return 0;
 }
