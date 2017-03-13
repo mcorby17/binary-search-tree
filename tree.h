@@ -60,9 +60,14 @@ class Tree {
 	//Input: An array of type T, a pointer to a node, an index
 	//Output: none
 
-	void goToLowestLeftLeaf(Node<T>*&);
-	//Sends a node pointer to the lowest left leaf from the node it's currently pointing at
-	//Input: A node pointer holding a node address
+	void updateNumOfLeaves(Node<T>*);
+	//Updates the Tree object's nunOfLeaves property as nodes are added through recursion
+	//Input: A node pointer that holds the address of a node
+	//Output: none
+
+	void setLeavesToZeroAndUpdate(Node<T>*);
+	//Resets numOfLeaves to zero before calling recursive updateNumOfLeaves function
+	//Input: none
 	//Output: none
 
   public:

@@ -13,8 +13,11 @@ int main(){
 	t1.addNode(2);
 	t1.addNode(8);
 	t1.addNode(4);
+	t1.addNode(0);
 	
-	t1.returnAscOrDesc('d');
+	t1.returnAscOrDesc('a');
+
+	cout << "\nNum of leaves: " << t1.getNumOfLeaves() << endl;
 
   return 0;
 }

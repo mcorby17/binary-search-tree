@@ -294,11 +294,23 @@ void Tree<T>::getAscendingData(T data[], Node<T>* node, int &index)
 }
 
 template<class T>
-void Tree<T>::goToLowestLeftLeaf(Node<T>* &ptr)
+void Tree<T>::updateNumOfLeaves(Node<T>* node)
 {
-	while (ptr->getLeftPtr() != NULL) {
-		ptr = ptr->getLeftPtr();
-	}
+	if (node->getLeftPtr() != NULL)
+		updateNumOfLeaves(node->getLeftPtr());
+	
+	if (node->getRightPtr() != NULL)
+		updateNumOfLeaves(node->getRightPtr());
+	
+	if (node->getLeftPtr() == NULL && node->getRightPtr() == NULL)
+		numOfLeaves++;
+}
+
+template<class T>
+void Tree<T>::setLeavesToZeroAndUpdate(Node<T>* node)
+{
+	numOfLeaves = 0;
+	updateNumOfLeaves(node);
 }
 
 // Accessors/Mutators -------------------------------------------
@@ -349,6 +361,7 @@ void Tree<T>::addNode(const T dat) {
 		parseTree(newNode);
   
   numOfNodes++;
+  setLeavesToZeroAndUpdate(startPtr);
 
 }
 
